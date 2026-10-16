@@ -7,10 +7,44 @@
     <title>Add Product</title>
 </head>
 <body>
-    <form>
-        <label for="product">Product Name</label>
-        <input type="text" id="product" name="productName">
-        <button type="submit">Add Product</button>
-    </form>
+    <h2>Add Product</h2>
+
+<form id="productForm">
+    <label for="product">Product Name</label>
+    <input type="text" id="product" name="productName" required>
+    <button type="submit">Add Product</button>
+</form>
+
+<p id="result"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    const form = document.getElementById('productForm');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const productName = document.getElementById('product').value;
+
+        try {
+            const response = await axios.post('/api/products', {
+                productName: productName
+            });
+
+            document.getElementById('result').textContent =
+                response.data.message + ': ' + response.data.product.productName;
+
+            console.log(response.data);
+            form.reset();
+        } catch (error) {
+            document.getElementById('result').textContent =
+                'Error adding product';
+            console.error(error);
+        }
+    });
+</script>
+
+
 </body>
 </html>
